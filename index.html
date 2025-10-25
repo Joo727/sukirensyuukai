@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja" class="overflow-x-hidden"> <!-- 横スクロール防止 -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>埼玉スキー練習会 | 都心のゲレンデと極上スパ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        html {
+            overflow-x: hidden; /* 横スクロール防止 */
+        }
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            scroll-behavior: smooth;
+            /* background-color はTailwindクラスで指定 */
+            overflow-x: hidden; /* 横スクロール防止 */
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 1.125rem; /* 18px */
+            top: 2.5rem; /* 40px */
+            height: calc(100% - 1.5rem);
+            width: 3px;
+            background: linear-gradient(to bottom, #a7d3f8, #60a5fa); /* 冬らしい青のグラデーション */
+            border-radius: 1.5px;
+        }
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        .timeline-marker {
+            position: absolute;
+            left: 0.5rem; /* 8px */
+            top: 1rem; /* 16px */
+            height: 1.25rem; /* 20px */
+            width: 1.25rem; /* 20px */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            z-index: 10;
+        }
+        .star-icon {
+            filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.8));
+        }
+        /* 雪をテーマにしたヘッダーグラデーション (よりシャープに) */
+        .wave-container {
+            position: relative;
+            background: linear-gradient(to top, #bfdbfe, #eff6ff); /* light blue to off-white, slightly colder */
+            z-index: 10; /* 雪より前面に */
+        }
+        .waves {
+            position: relative;
+            width: 100%;
+            height: 15vh;
+            min-height: 100px;
+            max-height: 150px;
+        }
+        .parallax > use {
+            animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
+        }
+        .parallax > use:nth-child(1) {
+            animation-delay: -2s;
+            animation-duration: 7s;
+        }
+        .parallax > use:nth-child(2) {
+            animation-delay: -3s;
+            animation-duration: 10s;
+        }
+        .parallax > use:nth-child(3) {
+            animation-delay: -4s;
+            animation-duration: 13s;
+        }
+        .parallax > use:nth-child(4) {
+            animation-delay: -5s;
+            animation-duration: 20s;
+        }
+        @keyframes move-forever {
+            0% { transform: translate3d(-90px,0,0); }
+            100% { transform: translate3d(85px,0,0); }
+        }
+
+        /* 雪のアニメーションスタイル */
+        .snow {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            /* pointer-events: none; は親コンテナで指定 */
+            animation: snowfall linear infinite;
+        }
+
+        @keyframes snowfall {
+            0% {
+                transform: translate(0, -10%);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(calc(var(--rand-x) * 1px), 100vh);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-sky-100 text-gray-800 overflow-x-hidden"> <!-- 冬をイメージした背景色と overflow-x-hidden -->
+
+    <!-- 雪のアニメーション用コンテナ -->
+    <div id="snow-container" class="fixed inset-0 overflow-hidden z-50 pointer-events-none"></div>
+
+    <!-- ヘッダーセクション -->
+    <header class="wave-container relative"> <!-- z-indexのためにrelativeを追加 -->
+        <div class="pt-24 pb-12 px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-black text-slate-800 tracking-tight mb-4" style="text-shadow: 1px 1px 2px rgba(255,255,255,0.7);">埼玉スキー練習会</h1>
+            <p class="text-lg md:text-2xl text-slate-700 font-semibold" style="text-shadow: 1px 1px 2px rgba(255,255,255,0.5);">〜都心のゲレンデで滑り、極上スパで癒される一日〜</p>
+        </div>
+        <!-- 波のアニメーション -->
+        <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+            <defs>
+                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g class="parallax">
+                <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7)" />
+                <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+                <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+                <use xlink:href="#gentle-wave" x="48" y="7" fill="#e0f2fe" /> <!-- body背景色に合わせる -->
+            </g>
+        </svg>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8 -mt-16 relative z-[60]"> <!-- ヘッダーより手前、雪より手前 -->
+
+        <!-- 行程表セクション -->
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-900">タイムライン</h2>
+            <div class="relative max-w-3xl mx-auto">
+                
+                <!-- 8:00 秋葉原集合 -->
+                <div class="timeline-item relative pl-12 pb-12">
+                    <div class="timeline-marker bg-sky-600 shadow-lg shadow-sky-600/50">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300">
+                        <time class="text-sm text-sky-700 font-semibold">08:00 AM</time>
+                        <h3 class="text-2xl font-bold mt-2 mb-3 text-gray-900">出発：秋葉原集合</h3>
+                        <p class="text-gray-600 mb-4">埼玉での練習会に向け、集合場所から出発します。</p>
+                        <a href="https://www.google.com/maps/dir/%E7%A7%A7%E8%91%89%E5%8E%9F%E9%A7%85/SAYAMA+SKI+RESORT/" target="_blank" class="inline-flex items-center bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md hover:shadow-lg">
+                            🚗<span class="ml-2">次の目的地へ</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 9:30 狭山スキー -->
+                <div class="timeline-item relative pl-12 pb-12">
+                    <div class="timeline-marker bg-blue-700 shadow-lg shadow-blue-700/50">
+                        <!-- スキーアイコン (雪の結晶) -->
+                        <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a.75.75 0 01.75.75v2.5a.75.75 0 01-1.5 0V2.75A.75.75 0 0112 2zM12 18.75a.75.75 0 01.75.75v2.5a.75.75 0 01-1.5 0v-2.5a.75.75 0 01.75-.75zM5.106 6.811a.75.75 0 011.06 0l1.77 1.768a.75.75 0 11-1.06 1.06l-1.77-1.768a.75.75 0 010-1.06zM16.066 17.77a.75.75 0 011.06 0l1.77 1.768a.75.75 0 11-1.06 1.06l-1.77-1.768a.75.75 0 010-1.06zM2.75 12.75a.75.75 0 01.75-.75h2.5a.75.75 0 010 1.5h-2.5a.75.75 0 01-.75-.75zM18 12a.75.75 0 00.75.75h2.5a.75.75 0 000-1.5h-2.5A.75.75 0 0018 12zM5.106 17.19a.75.75 0 111.06 1.06l-1.77 1.768a.75.75 0 01-1.06-1.06l1.77-1.768zM16.066 6.232a.75.75 0 111.06 1.06l-1.77 1.768a.75.75 0 01-1.06-1.06l1.77-1.768zM12 8.25a3.75 3.75 0 100 7.5 3.75 3.75 0 000-7.5zM9.75 12a2.25 2.25 0 114.5 0 2.25 2.25 0 01-4.5 0z"></path></svg>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300">
+                        <time class="text-sm text-blue-700 font-semibold">09:30 AM - 15:00 PM</time>
+                        <h3 class="text-2xl font-bold mt-2 mb-3 text-gray-900">狭山スキー場（ランチ込み）</h3>
+                        <p class="text-gray-600 mb-4">シーズンインに向けた練習会。インドアスキー場でしっかり滑り込みます。ランチもここで。</p>
+                        <a href="https://maps.app.goo.gl/BrJPcQr2xRnrVG9c7?g_st=ipc" target="_blank" class="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-300 mb-2">📍 スポット情報</a>
+                        <a href="https://www.google.com/maps/dir/SAYAMA+SKI+RESORT/Spa+JAPON/" target="_blank" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md hover:shadow-lg">
+                            🚗<span class="ml-2">次の目的地へ</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 15:30 スタジアムジャポン -->
+                <div class="timeline-item relative pl-12 pb-12">
+                    <div class="timeline-marker bg-indigo-600 shadow-lg shadow-indigo-600/50">
+                        <!-- 温泉アイコン -->
+                        <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 10.5C4.5 10.0858 4.66607 9.68858 4.95858 9.40039C5.25109 9.1122 5.65544 8.95 6.075 8.95C6.49457 8.95 6.89891 9.1122 7.19142 9.40039C7.48393 9.68858 7.65 10.0858 7.65 10.5C7.65 10.9142 7.48393 11.3114 7.19142 11.5996C6.89891 11.8878 6.49457 12.05 6.075 12.05C5.65544 12.05 5.25109 11.8878 4.95858 11.5996C4.66607 11.3114 4.5 10.9142 4.5 10.5ZM10.5 6.75C10.5 6.33579 10.6661 5.93858 10.9586 5.65039C11.2511 5.3622 11.6554 5.2 12.075 5.2C12.4946 5.2 12.8989 5.3622 13.1914 5.65039C13.4839 5.93858 13.65 6.33579 13.65 6.75C13.65 7.16421 13.4839 7.56142 13.1914 7.84961C12.8989 8.1378 12.4946 8.3 12.075 8.3C11.6554 8.3 11.2511 8.1378 10.9586 7.84961C10.6661 7.56142 10.5 7.16421 10.5 6.75ZM16.5 10.5C16.5 10.0858 16.6661 9.68858 16.9586 9.40039C17.2511 9.1122 17.6554 8.95 18.075 8.95C18.4946 8.95 18.8989 9.1122 19.1914 9.40039C19.4839 9.68858 19.65 10.0858 19.65 10.5C19.65 10.9142 19.4839 11.3114 19.1914 11.5996C18.8989 11.8878 18.4946 12.05 18.075 12.05C17.6554 12.05 17.2511 11.8878 16.9586 11.5996C16.6661 11.3114 16.5 10.9142 16.5 10.5ZM21 21.75H3V20.25C3 19.6533 3.23705 19.0811 3.65901 18.659C4.08097 18.237 4.65326 18 5.25 18H18.75C19.3467 18 19.919 18.237 20.341 18.659C20.7629 19.0811 21 19.6533 21 20.25V21.75Z"></path></svg>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300">
+                        <time class="text-sm text-indigo-700 font-semibold">15:30 PM - 18:30 PM</time>
+                        <h3 class="text-2xl font-bold mt-2 mb-3 text-gray-900">スパジアムジャポン</h3>
+                        <p class="text-gray-600 mb-4">スキーでかいた汗を流し、広いお風呂とサウナでリラックス。</p>
+                        <a href="https://maps.app.goo.gl/UQNsyvcoaEGwEdTK9?g_st=ipc" target="_blank" class="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-300 mb-2">♨️ スポット情報</a>
+                        <a href="https://www.google.com/maps/dir/Spa+JAPON/ハンバーグ専門店+秋葉原/" target="_blank" class="inline-flex items-center bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md hover:shadow-lg">
+                            🚗<span class="ml-2">次の目的地へ</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 19:30 ハンバーグ専門店 -->
+                <div class="timeline-item relative pl-12 pb-0">
+                    <div class="timeline-marker bg-slate-800 shadow-lg shadow-slate-800/50">
+                        <!-- 食事アイコン -->
+                        <svg class="w-5 h-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16 3C16.5304 3 17.0391 3.21071 17.4142 3.58579C17.7893 3.96086 18 4.46957 18 5L18 10L20 10C20.5304 10 21.0391 10.2107 21.4142 10.5858C21.7893 10.9609 22 11.4696 22 12C22 12.5304 21.7893 13.0391 21.4142 13.4142C21.0391 13.7893 20.5304 14 20 14L18 14L18 21C18 21.5304 17.7893 22.0391 17.4142 22.4142C17.0391 22.7893 16.5304 23 16 23C15.4696 23 14.9609 22.7893 14.5858 22.4142C14.2107 22.0391 14 21.5304 14 21L14 3C14 2.46957 14.2107 1.96086 14.5858 1.58579C14.9609 1.21071 15.4696 1 16 1C16.5304 1 17.0391 1.21071 17.4142 1.58579C17.7893 1.96086 18 2.46957 18 3L16 3ZM6 3C6.26522 3 6.51957 3.10536 6.70711 3.29289C6.89464 3.48043 7 3.73478 7 4L7 10C7 10.5304 7.21071 11.0391 7.58579 11.4142C7.96086 11.7893 8.46957 12 9 12C9.53043 12 10.0391 11.7893 10.4142 11.4142C10.7893 11.0391 11 10.5304 11 10L11 4C11 3.73478 11.1054 3.48043 11.2929 3.29289C11.4804 3.10536 11.7348 3 12 3C12.2652 3 12.5196 3.10536 12.7071 3.29289C12.8946 3.48043 13 3.73478 13 4L13 10C13 11.0609 12.5786 12.0783 11.8284 12.8284C11.0783 13.5786 10.0609 14 9 14C7.93913 14 6.92172 13.5786 6.17157 12.8284C5.42143 12.0783 5 11.0609 5 10L5 4C5 3.73478 5.10536 3.48043 5.29289 3.29289C5.48043 3.10536 5.73478 3 6 3ZM2 14L2 21C2 21.5304 2.21071 22.0391 2.58579 22.4142C2.96086 22.7893 3.46957 23 4 23C4.53043 23 5.03914 22.7893 5.41421 22.4142C5.78929 22.0391 6 21.5304 6 21L6 14L2 14Z"></path></svg>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl hover:scale-[1.02] transition-all duration-300">
+                        <time class="text-sm text-slate-700 font-semibold">19:30 PM</time>
+                        <h3 class="text-2xl font-bold mt-2 mb-3 text-gray-900">夕食：ハンバーグ専門店</h3>
+                        <p class="text-gray-600 mb-4">練習とお風呂の後は、肉汁たっぷりのハンバーグで乾杯！</p>
+                        <a href="https://maps.app.goo.gl/6F3FNVAc9EXZKHxTA?g_st=ipc" target="_blank" class="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition duration-300 mb-2">🍔 スポット情報</a>
+                        <a href="https://www.google.com/maps/dir/ハンバーグ専門店+秋葉原/秋葉原駅/" target="_blank" class="inline-flex items-center bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 shadow-md hover:shadow-lg">
+                            🏠<span class="ml-2">帰路につく</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 参考情報セクション -->
+        <section class="relative z-[60]"> <!-- メインコンテンツと同様に z-index を設定 -->
+            <h2 class="text-3xl font-bold text-center mb-6 text-gray-900">参考情報</h2>
+            <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 text-center">
+                <a href="https://sayamaski.jp/" target="_blank" class="block bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300">
+                    <h3 class="font-bold text-lg text-gray-900">狭山スキー場</h3>
+                    <p class="text-sm text-gray-500">公式サイト</p>
+                </a>
+                <a href="https://www.spajapo.com/spa/" target="_blank" class="block bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300">
+                    <h3 class="font-bold text-lg text-gray-900">スパジアムジャポン</h3>
+                    <p class="text-sm text-gray-500">公式サイト</p>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- フッター: 雪が後ろに隠れるように z-index を高く設定 -->
+    <footer class="relative z-[100] text-center py-8 mt-12 bg-white border-t border-gray-200">
+        <p class="text-gray-500">&copy; 2024 Your Ultimate Drive Plan. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // 雪のアニメーションを生成するJavaScript
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snow');
+            
+            // #snow-container の中に雪を生成
+            const container = document.getElementById('snow-container');
+            if (container) {
+                container.appendChild(snowflake);
+            } else {
+                // コンテナが見つからない場合のフォールバック
+                document.body.appendChild(snowflake);
+            }
+
+
+            const size = Math.random() * 5 + 2; // 2pxから7px
+            snowflake.style.width = `${size}px`;
+            snowflake.style.height = `${size}px`;
+
+            const startX = Math.random() * window.innerWidth;
+            snowflake.style.left = `${startX}px`;
+
+            const animationDuration = Math.random() * 10 + 5; // 5秒から15秒
+            snowflake.style.animationDuration = `${animationDuration}s`;
+            snowflake.style.animationDelay = `-${Math.random() * animationDuration}s`; // ランダムな開始遅延
+
+            // 横方向の動きにバリエーションを加えるためのCSS変数
+            snowflake.style.setProperty('--rand-x', (Math.random() - 0.5) * 200); // -100pxから100px
+
+            snowflake.addEventListener('animationend', () => {
+                snowflake.remove();
+            });
+        }
+
+        // 雪を継続的に生成
+        setInterval(createSnowflake, 200); // 0.2秒ごとに雪を生成
+    </script>
+
+</body>
+</html>
+
